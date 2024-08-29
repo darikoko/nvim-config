@@ -16,7 +16,6 @@ return require('packer').startup(function(use)
   -- My plugins here
    use {
   'nvim-telescope/telescope.nvim', tag = '0.1.4',
--- or                            , branch = '0.1.x',
   requires = { {'nvim-lua/plenary.nvim'} }
 }
 
@@ -28,31 +27,31 @@ use({
   requires = "nvim-treesitter/nvim-treesitter",
 })
 
-use {
-  'VonHeikemen/lsp-zero.nvim',
-  branch = 'v3.x',
-  requires = {
-    --- Uncomment these if you want to manage LSP servers from neovim
-     {'williamboman/mason.nvim'},
-     {'williamboman/mason-lspconfig.nvim'},
+ -- LSP configuration
+  use 'neovim/nvim-lspconfig'
 
-    -- LSP Support
-    {'neovim/nvim-lspconfig'},
-    -- Autocompletion
-    {'hrsh7th/nvim-cmp'},
-    {'hrsh7th/cmp-nvim-lsp'},
-    {'L3MON4D3/LuaSnip'},
+  -- Autocompletion
+  use {
+    'hrsh7th/nvim-cmp',        -- Autocompletion plugin
+    'hrsh7th/cmp-nvim-lsp',    -- LSP source for nvim-cmp
+    'hrsh7th/cmp-buffer',      -- Buffer source for nvim-cmp
+    'hrsh7th/cmp-path',        -- Path source for nvim-cmp
+    'saadparwaiz1/cmp_luasnip' -- LuaSnip source for nvim-cmp
   }
-}
+
+  -- Snippet engine
+  use 'L3MON4D3/LuaSnip'        -- Snippet engine
+  use 'rafamadriz/friendly-snippets' -- Collection of snippets
+
 
 use {
 "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
 }
-
 use "rebelot/kanagawa.nvim"
+use { 'EdenEast/nightfox.nvim' }
 use 'tamton-aquib/staline.nvim'
-
+use 'folke/tokyonight.nvim'
 use {
   'nvim-tree/nvim-tree.lua',
   requires = {
@@ -60,17 +59,23 @@ use {
   },
 }
 
+-- Add vim-bundle-mako
 use {
-  "nvim-neotest/neotest",
-  requires = {
-    "nvim-lua/plenary.nvim",
-    "antoinemadec/FixCursorHold.nvim"
-  }
+    'sophacles/vim-bundle-mako',
+    ft = 'mako'  -- Load only when editing mako files
 }
 
-use "rouge8/neotest-rust"
+-- Emmet Support
+use {
+  "olrtg/nvim-emmet",
+  config = function()
+    vim.keymap.set({ "n", "v" }, '<leader>xe', require('nvim-emmet').wrap_with_abbreviation)
+  end,
+}
 
-use "ron-rs/ron.vim"
+-- Smooth Scrolling
+use 'karb94/neoscroll.nvim'
+
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
